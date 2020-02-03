@@ -24,51 +24,42 @@ exports.up = function(knex) {
         .references('id')
         .inTable('disability_groups')
         .onUpdate('CASCADE')
-        .onDelete('RESTRICT')  
+        .onDelete('CASCADE')  
     })    
     .createTable('users', tbl => {
       tbl.increments();
       tbl.string('email', 128).notNullable().unique();
       tbl.string('password', 128).notNullable();
       tbl.boolean('underage').notNullable().defaultTo(true);
-      tbl.integer('role_id')
-        .unsigned()
-        .notNullable()
-        .references('id')
-        .inTable('roles')
-        .onUpdate('CASCADE')
-        .onDelete('RESTRICT')  
-      tbl.integer('parent_id')
-        .unsigned()
-        .references('id')
-        .inTable('users')
-        .onUpdate('CASCADE')
-        .onDelete('RESTRICT')        
-    })     
-    .createTable('user_profiles', tbl => {
-      tbl.increments();
       tbl.string('username', 60).notNullable().unique();
       tbl.string('firstname', 128).notNullable();
       tbl.string('lastname', 128).notNullable();
       tbl.date('dob');
       tbl.string('bio', 500);
+      tbl.string('picture', 500)
+      .defaultTo('https://prd-wret.s3-us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/styles/full_width/public/thumbnails/image/Placeholder_person.png')
       tbl.integer('disability_id')
         .unsigned()
         .references('id')
         .inTable('disabilities')
         .onUpdate('CASCADE')
-        .onDelete('RESTRICT')  
+        .onDelete('CASCADE')  
       tbl.integer('gender_id')
         .unsigned()
         .references('id')
         .inTable('genders')
         .onUpdate('CASCADE')
-        .onDelete('RESTRICT')        
-    })       
-  };
-  
+        .onDelete('CASCADE')   
+      tbl.integer('role_id')
+        .unsigned()
+        .references('id')
+        .inTable('roles')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')          
+    });
+}
   exports.down = function(knex) {
-    return knex.schema.dropTableIfExists('user_profiles')
+    return knex.schema
     .dropTableIfExists('users')
     .dropTableIfExists('disabilities')
     .dropTableIfExists('attendee_types')

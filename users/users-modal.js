@@ -6,6 +6,7 @@ module.exports = {
   getById,
   add,
   deleteUser,
+  editUser,
 };
 
 // Users
@@ -21,9 +22,10 @@ function getBy(filter) {
 };
 
 function getById(id) {
-  return db('users')
-    .where({ id })
-    .first();
+  console.log(id)
+  return db('user_profiles')
+  .where({ id })
+  .first();
 };
 
 function add(user) {
@@ -34,6 +36,12 @@ function add(user) {
       return getById({ id })
     });
 };
+
+function editUser(id, update) {
+  return db('user_profiles')
+  .where({ id })
+  .update(update)
+}
 
 function deleteUser(id) {
   return db('users')
